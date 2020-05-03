@@ -102,8 +102,6 @@ class HeapAnalytics {
     try {
       var response = await http.post(url, headers: header, body: jsonData);
 
-      debugPrint(response.body);
-
       if (response.statusCode != 200) {
         _onErrorHandler(null,
             'Request to $url failed. Response code: ${response.statusCode}');
