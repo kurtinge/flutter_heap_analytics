@@ -10,27 +10,20 @@ class HeapAnalytics {
   // Heap APP ID
   String _appId;
 
-  // User identifier
-  // This will be anonyomized in HEAP.
-  String _identity;
-
   void Function(Object error) _onError;
 
   // Provide an instance of the class
   // [appId] is the Heap app id for the current application
   // [identity] is the user identity the will be used to identify the user
   // [errorHandler] add your own error handler.
-  HeapAnalytics(
-      {@required String appId,
-      @required String identity,
-      Function errorHandler}) {
+  HeapAnalytics({@required String appId, Function errorHandler}) {
     _appId = appId;
-    _identity = identity;
     _onError = errorHandler;
   }
 
   Future<bool> track({
     @required String event,
+    @required String identity,
     @required Map<String, dynamic> properties,
     DateTime time,
   }) {
@@ -38,40 +31,59 @@ class HeapAnalytics {
       throw ArgumentError.notNull('event');
     }
 
+    if (identity == null) {
+      throw ArgumentError.notNull('identity');
+    }
+
     if (properties == null) {
       throw ArgumentError.notNull('properties');
     }
 
-    var eventData = _buildTrackData(event, properties, time ?? DateTime.now());
+    var eventData = _buildTrackData(
+      identity,
+      event,
+      properties,
+      time ?? DateTime.now(),
+    );
     String jsonData = json.encode(eventData);
     return _sendTrackEvent(jsonData);
   }
 
-  Future<bool> userProperties({@required Map<String, dynamic> properties}) {
+  Future<bool> userProperties({
+    @required String identity,
+    @required Map<String, dynamic> properties,
+  }) {
+    if (identity == null) {
+      throw ArgumentError.notNull('identity');
+    }
     if (properties == null) {
       throw ArgumentError.notNull('properties');
     }
-    var eventData = _buildUserProperties(properties);
+    var eventData = _buildUserProperties(identity, properties);
     String jsonData = json.encode(eventData);
     return _sendUserPropertiesEvent(jsonData);
   }
 
   Map<String, dynamic> _buildTrackData(
+    String identity,
     String event,
     Map<String, dynamic> properties,
     DateTime time,
   ) {
     return {
       'app_id': _appId,
-      'identity': _identity,
+      'identity': identity,
       'event': event,
       'timestamp': time.toIso8601String(),
       'properties': properties
     };
   }
 
-  Map<String, dynamic> _buildUserProperties(Map<String, dynamic> properties) {
-    return {'app_id': _appId, 'identity': _identity, 'properties': properties};
+  Map<String, dynamic> _buildUserProperties(
+    String identity,
+    Map<String, dynamic> properties,
+  ) {
+    return {'app_id': _appId, 'identity': identity, 'properties': properties};
   }
 
   Future<bool> _sendTrackEvent(String jsonData) =>

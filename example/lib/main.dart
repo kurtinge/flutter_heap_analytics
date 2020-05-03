@@ -45,6 +45,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final String _identity = '12-33-asd-222-qww-22';
   int _counter = 0;
   HeapAnalytics _heap;
 
@@ -56,28 +57,32 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
-      _heap.track(event: 'Increment Button', properties: {
-        'platform': 'Android',
-        'subject': "Clicked the increment button",
-        'new_count': _counter
-      });
+      _heap.track(
+        identity: _identity,
+        event: 'Increment Button',
+        properties: {
+          'platform': 'Android',
+          'subject': "Clicked the increment button",
+          'new_count': _counter
+        },
+      );
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _heap = HeapAnalytics(
-      appId: 'xxxxxx',
-      identity: '12-33-asd-222-qww-22',
-    );
+    _heap = HeapAnalytics(appId: 'xxxxxx');
 
-    _heap.userProperties(properties: {
-      'email': 'email@example.com',
-      'firstname': 'John',
-      'lastname': 'Doe',
-      'language': 'English',
-    });
+    _heap.userProperties(
+      identity: _identity,
+      properties: {
+        'email': 'email@example.com',
+        'firstname': 'John',
+        'lastname': 'Doe',
+        'language': 'English',
+      },
+    );
   }
 
   @override
