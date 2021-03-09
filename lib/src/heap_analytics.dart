@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class HeapAnalytics {
-  final String apiUrl = 'https://heapanalytics.com/api';
+  final String apiUrl = 'heapanalytics.com';
 
   // Heap APP ID
   String _appId;
@@ -93,7 +93,7 @@ class HeapAnalytics {
       _sendEvent(jsonData, 'add_user_properties');
 
   Future<bool> _sendEvent(String jsonData, String apiEvent) async {
-    String url = '$apiUrl/$apiEvent';
+    final Uri url = Uri.https(apiUrl, '/api/${apiEvent}');
 
     Map<String, String> header = {
       'Content-Type': 'application/json',
