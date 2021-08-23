@@ -45,7 +45,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final String _identity = '12-33-asd-222-qww-22';
+  final String _identity = 'yyy';
   int _counter = 0;
   HeapAnalytics _heap;
 
@@ -72,15 +72,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _heap = HeapAnalytics(appId: 'xxxxxx');
+    _heap = HeapAnalytics(appId: '4266189896');
 
     _heap.userProperties(
       identity: _identity,
       properties: {
-        'email': 'email@example.com',
-        'firstname': 'John',
-        'lastname': 'Doe',
-        'language': 'English',
+        'email': 'test@loft.com.br',
+        'firstname': 'Alex',
+        'lastname': 'Zenon',
+        'language': 'Português',
       },
     );
   }
@@ -124,7 +124,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.display1,
             ),
           ],
         ),
