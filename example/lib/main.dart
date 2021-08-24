@@ -45,7 +45,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final String _identity = 'yyy';
+  final String _identity = 'userId';
   int _counter = 0;
   HeapAnalytics _heap;
 
@@ -72,14 +72,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _heap = HeapAnalytics(appId: '4266189896');
+    _heap = HeapAnalytics(appId: 'your_appId');
 
     _heap.userProperties(
       identity: _identity,
       properties: {
-        'email': 'test@loft.com.br',
-        'firstname': 'Alex',
-        'lastname': 'Zenon',
+        'email': 'your@email.com',
+        'firstname': 'FirstName',
+        'lastname': 'LastName',
         'language': 'Português',
       },
     );
