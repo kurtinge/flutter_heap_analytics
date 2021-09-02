@@ -8,36 +8,25 @@ class HeapAnalytics {
   final String apiUrl = 'heapanalytics.com';
 
   // Heap APP ID
-  String _appId;
+  String? _appId;
 
-  void Function(Object error) _onError;
+  void Function(Object error)? _onError;
 
   // Provide an instance of the class
   // [appId] is the Heap app id for the current application
   // [identity] is the user identity the will be used to identify the user
   // [errorHandler] add your own error handler.
-  HeapAnalytics({@required String appId, Function errorHandler}) {
+  HeapAnalytics({required String appId, Function? errorHandler}) {
     _appId = appId;
-    _onError = errorHandler;
+    _onError = errorHandler as void Function(Object)?;
   }
 
   Future<bool> track({
-    @required String event,
-    @required String identity,
-    @required Map<String, dynamic> properties,
-    DateTime time,
+    required String event,
+    required String identity,
+    required Map<String, dynamic> properties,
+    DateTime? time,
   }) {
-    if (event == null) {
-      throw ArgumentError.notNull('event');
-    }
-
-    if (identity == null) {
-      throw ArgumentError.notNull('identity');
-    }
-
-    if (properties == null) {
-      throw ArgumentError.notNull('properties');
-    }
 
     var eventData = _buildTrackData(
       identity,
@@ -50,15 +39,9 @@ class HeapAnalytics {
   }
 
   Future<bool> userProperties({
-    @required String identity,
-    @required Map<String, dynamic> properties,
+    required String identity,
+    required Map<String, dynamic> properties,
   }) {
-    if (identity == null) {
-      throw ArgumentError.notNull('identity');
-    }
-    if (properties == null) {
-      throw ArgumentError.notNull('properties');
-    }
     var eventData = _buildUserProperties(identity, properties);
     String jsonData = json.encode(eventData);
     return _sendUserPropertiesEvent(jsonData);
@@ -93,7 +76,7 @@ class HeapAnalytics {
       _sendEvent(jsonData, 'add_user_properties');
 
   Future<bool> _sendEvent(String jsonData, String apiEvent) async {
-    final Uri url = Uri.https(apiUrl, '/api/${apiEvent}');
+    final Uri url = Uri.https(apiUrl, '/api/$apiEvent');
 
     Map<String, String> header = {
       'Content-Type': 'application/json',
@@ -115,7 +98,7 @@ class HeapAnalytics {
 
   void _onErrorHandler(dynamic error, String message) {
     if (_onError != null) {
-      _onError(error ?? message);
+      _onError!(error ?? message);
     } else {
       debugPrint(message);
     }
